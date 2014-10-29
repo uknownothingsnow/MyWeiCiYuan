@@ -1,23 +1,31 @@
 package org.qii.weiciyuan.ui.adapter;
 
+import org.qii.weiciyuan.R;
 import org.qii.weiciyuan.bean.MessageBean;
 import org.qii.weiciyuan.bean.UserBean;
 import org.qii.weiciyuan.support.lib.AutoScrollListView;
 import org.qii.weiciyuan.support.lib.TopTipBar;
 import org.qii.weiciyuan.support.lib.VelocityListView;
 import org.qii.weiciyuan.support.settinghelper.SettingUtility;
+import org.qii.weiciyuan.support.utils.GlobalContext;
 import org.qii.weiciyuan.support.utils.TimeLineUtility;
 import org.qii.weiciyuan.support.utils.Utility;
+import org.qii.weiciyuan.ui.send.WriteCommentActivity;
+import org.qii.weiciyuan.ui.send.WriteRepostActivity;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.LongSparseArray;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 
 import java.util.List;
@@ -205,20 +213,6 @@ public class StatusListAdapter extends AbstractAppListAdapter<MessageBean> {
                 } else {
                     holder.timeline_gps.setVisibility(View.INVISIBLE);
                 }
-
-                if (checkRepostsCount) {
-                    holder.repost_count.setText(String.valueOf(msg.getReposts_count()));
-                    holder.repost_count.setVisibility(View.VISIBLE);
-                } else {
-                    holder.repost_count.setVisibility(View.GONE);
-                }
-
-                if (checkCommentsCount) {
-                    holder.comment_count.setText(String.valueOf(msg.getComments_count()));
-                    holder.comment_count.setVisibility(View.VISIBLE);
-                } else {
-                    holder.comment_count.setVisibility(View.GONE);
-                }
             }
         }
 
@@ -328,6 +322,52 @@ public class StatusListAdapter extends AbstractAppListAdapter<MessageBean> {
                 interruptPicDownload(holder.repost_content_pic_multi);
             }
         }
+
+        setOverflowMenu(holder, position);
+    }
+
+    private void setOverflowMenu(final ViewHolder holder, final int position) {
+        final AbstractAppListAdapter self = this;
+        holder.overflow_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popup = new PopupMenu(self.getActivity(), holder.overflow_button);
+                MenuInflater inflater = popup.getMenuInflater();
+                inflater.inflate(R.menu.context_menu_overflow, popup.getMenu());
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        Intent intent;
+                        switch (item.getItemId()) {
+                            case R.id.action_repost:
+                                intent = new Intent(getActivity(), WriteRepostActivity.class);
+                                intent.putExtra("token", GlobalContext.getInstance().getSpecialToken());
+                                intent.putExtra("id", String.valueOf(bean.get(position).getId()));
+                                intent.putExtra("msg", bean.get(position));
+                                getActivity().startActivity(intent);
+                                return true;
+                            case R.id.action_comment:
+                                intent = new Intent(getActivity(), WriteCommentActivity.class);
+                                intent.putExtra("token", GlobalContext.getInstance().getSpecialToken());
+                                intent.putExtra("id", String.valueOf(bean.get(position).getId()));
+                                intent.putExtra("msg", bean.get(position));
+                                getActivity().startActivity(intent);
+                                return true;
+                            case R.id.action_save:
+//                                                if (Utility.isTaskStopped(favTask)) {
+//                                                    favTask = new FavAsyncTask(GlobalContext.getInstance().getSpecialToken(),
+//                                                        bean.getId());
+//                                                    favTask.executeOnExecutor(MyAsyncTask.THREAD_POOL_EXECUTOR);
+//                                                }
+                                return true;
+
+                        }
+                        return false;
+                    }
+                });
+                popup.show();
+            }
+        });
     }
 
 

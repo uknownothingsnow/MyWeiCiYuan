@@ -6,15 +6,20 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.6.3+'
+        classpath 'com.android.tools.build:gradle:0.12.+'
     }
 }
 
 apply plugin: 'android'
 
+repositories {
+    maven { url 'https://github.com/donnfelker/mvn-repo/raw/master/' }
+    mavenLocal()
+    mavenCentral()
+}
 
 dependencies {
-    compile files('libs/gson-2.2.2.jar')
+    compile 'com.google.code.gson:gson:2.2.4'
     compile project(':libs:slidingmenulibrary')
     compile project(':libs:showcaseviewlibrary')
     compile 'com.google.android.gms:play-services:4.0.30+'
@@ -23,12 +28,12 @@ dependencies {
 
 android {
 
-    buildToolsVersion "19"
-    compileSdkVersion 19
+    buildToolsVersion "20.0"
+    compileSdkVersion 20
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 19
+        targetSdkVersion 20
     }
 
     target = 'android-19'

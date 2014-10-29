@@ -23,6 +23,9 @@ import org.qii.weiciyuan.support.utils.ThemeUtility;
 import org.qii.weiciyuan.support.utils.Utility;
 import org.qii.weiciyuan.support.utils.ViewUtility;
 import org.qii.weiciyuan.ui.basefragment.AbstractTimeLineFragment;
+import org.qii.weiciyuan.ui.send.WriteCommentActivity;
+import org.qii.weiciyuan.ui.send.WriteRepostActivity;
+import org.qii.weiciyuan.ui.task.FavAsyncTask;
 import org.qii.weiciyuan.ui.userinfo.UserInfoActivity;
 
 import android.app.Activity;
@@ -32,6 +35,8 @@ import android.support.v4.app.Fragment;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,9 +45,11 @@ import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.GridLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import java.util.ArrayDeque;
@@ -264,7 +271,7 @@ public abstract class AbstractAppListAdapter<T extends ItemBean> extends BaseAda
      */
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
         PrefView prefView = null;
 
@@ -388,7 +395,7 @@ public abstract class AbstractAppListAdapter<T extends ItemBean> extends BaseAda
 
     //weibo image widgets and its forward weibo image widgets are the same
     private ViewHolder buildHolder(View convertView) {
-        ViewHolder holder = new ViewHolder();
+        final ViewHolder holder = new ViewHolder();
         holder.username = ViewUtility.findViewById(convertView, R.id.username);
         TextPaint tp = holder.username.getPaint();
         if (tp != null) {
@@ -411,12 +418,12 @@ public abstract class AbstractAppListAdapter<T extends ItemBean> extends BaseAda
         holder.repost_layout = ViewUtility.findViewById(convertView, R.id.repost_layout);
         holder.repost_flag = ViewUtility.findViewById(convertView, R.id.repost_flag);
         holder.count_layout = ViewUtility.findViewById(convertView, R.id.count_layout);
-        holder.repost_count = ViewUtility.findViewById(convertView, R.id.repost_count);
-        holder.comment_count = ViewUtility.findViewById(convertView, R.id.comment_count);
         holder.timeline_gps = ViewUtility.findViewById(convertView, R.id.timeline_gps_iv);
         holder.timeline_pic = ViewUtility.findViewById(convertView, R.id.timeline_pic_iv);
         holder.replyIV = ViewUtility.findViewById(convertView, R.id.replyIV);
         holder.source = ViewUtility.findViewById(convertView, R.id.source);
+        holder.overflow_button = ViewUtility.findViewById(convertView, R.id.card_header_button_overflow);
+
         return holder;
     }
 
@@ -439,12 +446,6 @@ public abstract class AbstractAppListAdapter<T extends ItemBean> extends BaseAda
             }
             if (holder.time != null) {
                 holder.time.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-            }
-            if (holder.repost_count != null) {
-                holder.repost_count.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-            }
-            if (holder.comment_count != null) {
-                holder.comment_count.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
             }
         }
 
@@ -472,19 +473,6 @@ public abstract class AbstractAppListAdapter<T extends ItemBean> extends BaseAda
 
         }
 
-        if (holder.repost_count != null) {
-            currentWidgetTextSizePx = holder.repost_count.getTextSize();
-            if (Utility.sp2px(prefFontSizeSp - 5) != currentWidgetTextSizePx) {
-                holder.repost_count.setTextSize(prefFontSizeSp - 5);
-            }
-        }
-
-        if (holder.comment_count != null) {
-            currentWidgetTextSizePx = holder.comment_count.getTextSize();
-            if (Utility.sp2px(prefFontSizeSp - 5) != currentWidgetTextSizePx) {
-                holder.comment_count.setTextSize(prefFontSizeSp - 5);
-            }
-        }
     }
 
     protected abstract void bindViewData(ViewHolder holder, int position);
@@ -787,10 +775,6 @@ public abstract class AbstractAppListAdapter<T extends ItemBean> extends BaseAda
 
         LinearLayout count_layout;
 
-        TextView repost_count;
-
-        TextView comment_count;
-
         TextView source;
 
         ImageView timeline_gps;
@@ -798,6 +782,8 @@ public abstract class AbstractAppListAdapter<T extends ItemBean> extends BaseAda
         ImageView timeline_pic;
 
         ImageView replyIV;
+
+        ImageView overflow_button;
     }
 
     public void removeItem(final int postion) {

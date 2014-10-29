@@ -21,3 +21,9 @@ proguard-project.txt
 build.xml
 project.properties
 weiciyuan.iml
+*.DS_Store
+/build
+/libs/*/build
+/gen
+/.gradle
+gradle/

@@ -625,10 +625,10 @@ public class FriendsTimeLineFragment extends AbstractMessageTimeLineFragment<Mes
 
     @Override
     protected void listViewItemClick(AdapterView parent, View view, int position, long id) {
-        startActivityForResult(
-                BrowserWeiboMsgActivity.newIntent(getList().getItem(position),
-                        GlobalContext.getInstance().getSpecialToken()),
-                MainTimeLineActivity.REQUEST_CODE_UPDATE_FRIENDS_TIMELINE_COMMENT_REPOST_COUNT);
+//        startActivityForResult(
+//                BrowserWeiboMsgActivity.newIntent(getList().getItem(position),
+//                        GlobalContext.getInstance().getSpecialToken()),
+//                MainTimeLineActivity.REQUEST_CODE_UPDATE_FRIENDS_TIMELINE_COMMENT_REPOST_COUNT);
 
 
     }

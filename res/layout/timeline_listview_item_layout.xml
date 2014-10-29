@@ -47,25 +47,11 @@
                     android:visibility="gone"
                     android:src="?timeline_pic_icon"/>
 
-            <TextView
-                    android:id="@+id/repost_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:textColor="?android:textColorTertiary"
-                    android:drawablePadding="4dp"
-                    android:fontFamily="monospace"
-                    android:drawableLeft="?timeline_repost_flag"/>
-
-            <TextView
-                    android:id="@+id/comment_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:drawablePadding="4dp"
-                    android:fontFamily="monospace"
-                    android:textColor="?android:textColorTertiary"
-                    android:drawableLeft="?timeline_comment_flag"/>
+            <ImageView
+                android:id="@+id/card_header_button_overflow"
+                style="@style/cardOverflow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
         </LinearLayout>
 

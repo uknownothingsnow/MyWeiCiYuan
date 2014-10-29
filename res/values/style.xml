@@ -112,4 +112,10 @@
 
     </style>
 
+    <!-- Button Overflow in Header -->
+    <style name="cardOverflow" >
+        <item name="android:background">@drawable/card_menu_button_rounded_overflow</item>
+        <item name="android:layout_marginRight">@dimen/card_header_button_overflow_margin_right</item>
+    </style>
+
 </resources>
